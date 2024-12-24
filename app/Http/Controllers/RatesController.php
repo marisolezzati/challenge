@@ -48,7 +48,6 @@ class RatesController extends Controller
                                 ]
         ];
         $result = RatesService::getRates($accessToken, $request->vendorId, $params);
-        $data = $result->results;
         $data = array_map(function($res) {
             $rate = [
                 "CARRIER" => $res->name,
