@@ -42,14 +42,19 @@
                             </form>
                         </div>
 
+                        @if((isset($error) && !is_null($error)))   
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                                The server returned the error "{{(!is_null($error))?$error:''}}" printing the example output.
+                            The server returned the error "{{$error}}". <br>
+                            This output was generated processing an example response to show how is formatted.
                         </div>
+                        @endif  
                         
+                        @if(isset($data) && !is_null($data))
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                            Formatted API response:
-                                "{{(!is_null($data))?json_encode($data):''}}"
+                        Final output:
+                                "{{json_encode($data)}}"
                         </div>
+                        @endif 
                     </main>
                 </div>
             </div>

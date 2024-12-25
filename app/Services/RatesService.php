@@ -14,21 +14,21 @@ class RatesService
         $requestUrl = $url.'?'.http_build_query($params);
 
         $client = new Client(['verify' => false]);
-      /*  try{
+
+         try{
+           
             $response = $client->request('GET', $requestUrl ,[
                     'headers' => 
                         [
                             'Authorization' => "Bearer {$token}",         
                             'User-Agent' => $_SERVER['HTTP_USER_AGENT'], 
-                            'Accept' => 'application/json',
-                            'Content-Type' => 'application/json',                
                         ]
                     ,
                     ]
             );
             $contents = json_decode($response->getBody()->getContents());
             return $contents->data;
-        } catch (\Exception $e) {*/
+        } catch (\Exception $e) {
             //server retunrs a 403,"message":"Domain is not whitelisted" use sample code
             $contents = json_decode('{
                 "results": [
@@ -53,12 +53,34 @@ class RatesService
                 "rateType": "DRAYAGE",
                 "iconUrl": "https://dev.shipprimus.com/images/blank64x32.png",
                 "responseTime": 1.01
+                },
+                {
+                "id": "999999",
+                "name": "Carrier Example",
+                "SCAC": "",
+                "rating": 4,
+                "serviceLevel": "Service Level Second Example",
+                "serviceLevelCode": "",
+                "transitDays": 5,
+                "rateBreakdown": [
+                {
+                "name": "FREIGHT CHARGE",
+                "total": 1999
+                }
+                ],
+                "rateRemarks": [
+                "Remarks example"
+                ],
+                "total": 1999,
+                "rateType": "DRAYAGE",
+                "iconUrl": "https://dev.shipprimus.com/images/blank64x32.png",
+                "responseTime": 1.01
                 }
                 ],
                 "message": ""
                 }');
-            $contents->message = "403";//$e;
+            $contents->message = $e->getResponse()->getBody()->getContents();
             return $contents;
-       // }
+        }
     }
 }
