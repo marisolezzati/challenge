@@ -15,7 +15,11 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        $token = TokenService::getToken($request->username, $request->password);
+        $data = $request->validate([
+            'username'=> ['required','string'],
+            'password'=> ['required','string'],
+        ]);
+        $token = TokenService::getToken($data['username'], $data['password']);
         return view('rates.result', ['accessToken'=>$token->accessToken, 'tokenExp'=>$token->exp]);
     }
 }

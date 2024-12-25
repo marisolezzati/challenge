@@ -23,31 +23,54 @@ class RatesController extends Controller
         else{
             $accessToken = $request->accessToken;
         }
-
+        
+        $data = $request->validate([
+            'vendorId'  => ['required','string'],
+            'originCity'  => ['required','string'],
+            'originState'  =>  ['required','string','size:2'],
+            'originZipcode'  => ['required','string'],
+            'originCountry'  => ['required','string','size:2'],
+            'destinationCity'  => ['required','string'],
+            'destinationState'  => ['required','string','size:2'],
+            'destinationZipcode'  => ['required','string'],
+            'destinationCountry'  => ['required','string','size:2'],
+            'UOM' =>  ['required','string','size:2'],
+            "qty"  =>  ['required','string'],
+            "weight" =>  ['required','numeric'],
+            "weightType" =>  ['required','string'],
+            "length" =>  ['required','numeric'],
+            "width" =>  ['required','numeric'],
+            "height" =>  ['required','numeric'],
+            "class" =>  ['required','numeric'],
+            "hazmat" =>  ['required','numeric'],
+            "dimType" =>  ['required','string'], 
+            "stack" =>  ['required'],
+            "comodity" =>  ['nullable'],
+        ]);
         $params  = [
-            'originCity'  => $request->originCity,
-            'originState'  =>  $request->originState,
-            'originZipcode'  => $request->originZipcode,
-            'originCountry'  => $request->originCountry,
-            'destinationCity'  => $request->destinationCity,
-            'destinationState'  => $request->destinationState,
-            'destinationZipcode'  => $request->destinationZipcode,
-            'destinationCountry'  => $request->destinationCountry,
-            'UOM' =>  $request->UOM,
-            'freightInfo'  =>  ["qty"  => $request->qty,
-                                "weight" => $request->weight,
-                                "weightType" => $request->weightType,
-                                "length" => $request->length,
-                                "width" => $request->width,
-                                "height" => $request->height,
-                                "class" => $request->class,
-                                "hazmat" => $request->hazmat,
-                                "commodity" => $request->commodity,
-                                "dimType" => $request->dimType,
-                                "stack" => $request->stack
+            'originCity'  => $data['originCity'],
+            'originState'  =>  $data['originState'],
+            'originZipcode'  => $data['originZipcode'],
+            'originCountry'  => $data['originCountry'],
+            'destinationCity'  => $data['destinationCity'],
+            'destinationState'  => $data['destinationState'],
+            'destinationZipcode'  => $data['destinationZipcode'],
+            'destinationCountry'  => $data['destinationCountry'],
+            'UOM' =>  $data['UOM'],
+            'freightInfo'  =>  ["qty"  => $data['qty'],
+                                "weight" => $data['weight'],
+                                "weightType" => $data['weightType'],
+                                "length" => $data['length'],
+                                "width" => $data['width'],
+                                "height" => $data['height'],
+                                "class" => $data['class'],
+                                "hazmat" => $data['hazmat'],
+                                "commodity" => (isset($data['commodity']))?$data['commodity']:"",
+                                "dimType" => $data['dimType'],
+                                "stack" => $data['stack']
                                 ]
         ];
-        $result = RatesService::getRates($accessToken, $request->vendorId, $params);
+        $result = RatesService::getRates($accessToken, $data['vendorId'], $params);
         $data = array_map(function($res) {
             $rate = [
                 "CARRIER" => $res->name,
