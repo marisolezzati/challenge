@@ -57,18 +57,20 @@ class RatesController extends Controller
             'destinationZipcode'  => $data['destinationZipcode'],
             'destinationCountry'  => $data['destinationCountry'],
             'UOM' =>  $data['UOM'],
-            'freightInfo'  =>  ["qty"  => $data['qty'],
-                                "weight" => $data['weight'],
-                                "weightType" => $data['weightType'],
-                                "length" => $data['length'],
-                                "width" => $data['width'],
-                                "height" => $data['height'],
-                                "class" => $data['class'],
-                                "hazmat" => $data['hazmat'],
-                                "commodity" => (isset($data['commodity']))?$data['commodity']:"",
-                                "dimType" => $data['dimType'],
-                                "stack" => $data['stack']
-                                ]
+            'freightInfo'  => [ 
+                    ["qty"  => $data['qty'],
+                    "weight" => $data['weight'],
+                    "weightType" => $data['weightType'],
+                    "length" => $data['length'],
+                    "width" => $data['width'],
+                    "height" => $data['height'],
+                    "class" => $data['class'],
+                    "hazmat" => $data['hazmat'],
+                    "commodity" => (isset($data['commodity']))?$data['commodity']:"",
+                    "dimType" => $data['dimType'],
+                    "stack" => $data['stack']
+                ],
+            ]
         ];
         $result = RatesService::getRates($accessToken, $data['vendorId'], $params);
         $data = array_map(function($res) {

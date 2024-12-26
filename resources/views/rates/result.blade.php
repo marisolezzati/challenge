@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>>Get Rates</title>
+        <title>Get Rates</title>
   </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
@@ -42,10 +42,9 @@
                             </form>
                         </div>
 
-                        @if((isset($error) && !is_null($error)))   
+                        @if((isset($error) && !is_null($error) && $error!=""))   
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             The server returned the error "{{$error}}". <br>
-                            This output was generated processing an example response to show how is formatted.
                         </div>
                         @endif  
                         
