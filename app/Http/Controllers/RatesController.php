@@ -6,24 +6,19 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 use App\Services\RatesService;
 use App\Services\TokenService;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
 
 class RatesController extends Controller
 {
     
+    public function index()
+    {
+        return view('rates.index');
+    }
 
     public function store(Request $request)
     {
-        $tokenExp = $request->tokenExp;
-        if($tokenExp < time()){
-            //token is expired, refresh
-            $token = TokenService::refreshToken($request->accessToken);
-            $accessToken = $token->accessToken;
-            //$tokenExp = $token->exp; //commented out as it seems that the refresh method is not returning a new exp but only the token.
-        }
-        else{
-            $accessToken = $request->accessToken;
-        }
-        
         $data = $request->validate([
             'vendorId'  => ['required','string'],
             'originCity'  => ['required','string'],
@@ -47,6 +42,7 @@ class RatesController extends Controller
             "stack" =>  ['required'],
             "comodity" =>  ['nullable'],
         ]);
+
         $params  = [
             'originCity'  => $data['originCity'],
             'originState'  =>  $data['originState'],
@@ -72,7 +68,18 @@ class RatesController extends Controller
                 ],
             ]
         ];
-        $result = RatesService::getRates($accessToken, $data['vendorId'], $params);
+
+        $accessTokenInfo = $request->session()->only(['apiAccessToken', 'tokenExp']);
+        
+        $tokenExp = $accessTokenInfo['tokenExp'];
+        if($tokenExp < time()){
+            //token is expired, refresh
+            $token = TokenService::refreshToken($accessTokenInfo['apiAccessToken']);
+            session(['apiAccessToken' => $token->accessToken]);
+            //session(['tokenExp' => $token->exp]); //commented out as it seems that the refresh method is not returning a new exp but only the token.
+        }
+
+        $result = RatesService::getRates($accessTokenInfo['apiAccessToken'], $data['vendorId'], $params);
         $data = array_map(function($res) {
             $rate = [
                 "CARRIER" => $res->name,
@@ -83,6 +90,6 @@ class RatesController extends Controller
             ];
             return $rate;
         }, $result->results);
-        return view('rates.result', ['accessToken'=>$accessToken, 'tokenExp'=>$tokenExp, 'data'=>$data, 'error'=>$result->message]);
+        return view('rates.index', ['data'=>$data, 'error'=>$result->message]);
     }
 }

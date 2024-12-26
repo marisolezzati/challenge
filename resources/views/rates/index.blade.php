@@ -14,8 +14,6 @@
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <form action="{{ route('rates.store') }}" method="POST" >
                                 @csrf
-                                <input name="accessToken" hidden value="{{(!is_null($accessToken))?$accessToken:''}}">
-                                <input name="tokenExp" hidden value="{{(!is_null($tokenExp))?$tokenExp:''}}">
                                 Vendor Id: <input name="vendorId" value="1901539643"/> <br>
                                 Origin City: <input name="originCity" value="KEY LARGO"/> <br>
                                 Origin State: <input name="originState" value="FL"/> <br>
