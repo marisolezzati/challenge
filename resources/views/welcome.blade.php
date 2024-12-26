@@ -10,6 +10,15 @@
         <div>
             <main class="mt-6">
                 <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <form action="{{ route('users.store') }}" method="POST" >
                         @csrf
                         User Name: <input name="username" value="testDemo"/> 

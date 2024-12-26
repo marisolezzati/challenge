@@ -90,6 +90,6 @@ class RatesController extends Controller
             ];
             return $rate;
         }, $result->results);
-        return view('rates.index', ['data'=>$data, 'error'=>$result->message]);
+        return view('rates.index', ['data'=>$data, 'apiError'=>$result->message]);
     }
 }

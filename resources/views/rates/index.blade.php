@@ -12,6 +12,15 @@
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     <main class="mt-6">
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <form action="{{ route('rates.store') }}" method="POST" >
                                 @csrf
                                 Vendor Id: <input name="vendorId" value="1901539643"/> <br>
@@ -40,9 +49,9 @@
                             </form>
                         </div>
 
-                        @if((isset($error) && !is_null($error) && $error!=""))   
+                        @if((isset($apiError) && !is_null($apiError) && $apiError!=""))   
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-                            The server returned the error "{{$error}}". <br>
+                            The server returned the error "{{$apiError}}". <br>
                         </div>
                         @endif  
                         
@@ -51,7 +60,7 @@
                         Final output:
                                 "{{json_encode($data)}}"
                         </div>
-                        @endif 
+                        @endif
                     </main>
                 </div>
             </div>
