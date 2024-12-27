@@ -26,6 +26,11 @@
                         <input type="submit" value="Get Token"/> 
                         </select>
                     </form>
+                    @if((isset($apiError) && !is_null($apiError) && $apiError!=""))   
+                        <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                            The server returned the error "{{$apiError}}". <br>
+                        </div>
+                    @endif 
                 </div>
             </main>
         </div>

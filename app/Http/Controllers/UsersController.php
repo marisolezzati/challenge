@@ -20,8 +20,14 @@ class UsersController extends Controller
             'password'=> ['required','string'],
         ]);
         $token = TokenService::getToken($data['username'], $data['password']);
-        session(['apiAccessToken' => $token->accessToken]);
-        session(['tokenExp' => 1]);
-        return to_route('rates.index');
+        if($token->accessToken==""){
+            $errorMessage = json_decode($token->message);
+            return view('welcome', ['apiError'=>$errorMessage->error->code." - ".$errorMessage->error->message]);
+        }
+        else{
+            session(['apiAccessToken' => $token->accessToken]);
+            session(['tokenExp' => $token->exp]);
+            return to_route('rates.index');
+        }
     }
 }

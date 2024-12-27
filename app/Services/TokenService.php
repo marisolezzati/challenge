@@ -24,7 +24,10 @@ class TokenService
             $token = json_decode($response->getBody()->getContents());
             return $token->data;
         } catch (\Exception $e) {
-            return $e;
+            $contents = (object)[];
+            $contents->accessToken = "";
+            $contents->message = $e->getResponse()->getBody()->getContents();
+            return $contents;
         }
     }
 
@@ -45,7 +48,10 @@ class TokenService
 
             return $token->data;
         } catch (\Exception $e) {
-            return $e;
+            $contents = (object)[];
+            $contents->accessToken = "";
+            $contents->message = $e->getResponse()->getBody()->getContents();
+            return $contents;
         }
     }
 }
